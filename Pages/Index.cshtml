@@ -1,0 +1,56 @@
+@page
+@model IndexModel
+@{
+    Layout = null;
+}
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>AI image and text demo</title>
+    <style>
+        body { font-family: system-ui, sans-serif; max-width: 960px; margin: 2rem auto; padding: 0 1rem; color: #172033; }
+        form, section { border: 1px solid #d8deea; border-radius: 12px; padding: 1.25rem; margin-bottom: 1.25rem; }
+        label { display: block; font-weight: 650; margin-bottom: .4rem; }
+        input, textarea { box-sizing: border-box; width: 100%; padding: .7rem; margin-bottom: .8rem; border: 1px solid #aeb8cb; border-radius: 7px; }
+        button { border: 0; border-radius: 7px; padding: .7rem 1rem; color: white; background: #2056c9; cursor: pointer; }
+        button.text { background: #12724c; }
+        img { display: block; max-width: 100%; max-height: 480px; border-radius: 8px; margin-top: 1rem; }
+        .message { padding: .75rem; border-radius: 7px; background: #fff4d6; margin-bottom: 1rem; }
+    </style>
+</head>
+<body>
+    <h1>AI image and text demo</h1>
+    @if (!string.IsNullOrWhiteSpace(Model.StatusMessage))
+    {
+        <div class="message" role="status">@Model.StatusMessage</div>
+    }
+
+    <form method="post">
+        <h2>Generate an image</h2>
+        <label asp-for="Prompt">Describe the image</label>
+        <input asp-for="Prompt" placeholder="A futuristic city skyline at sunset" />
+        <span asp-validation-for="Prompt"></span>
+        <button type="submit" asp-page-handler="GenerateImage">Generate image</button>
+    </form>
+
+    <section>
+        <h2>Image result</h2>
+        <img src="@Model.GeneratedImageUrl" alt="Generated result or preview" />
+    </section>
+
+    <form method="post">
+        <h2>Generate text</h2>
+        <label asp-for="TextPrompt">Ask for text</label>
+        <textarea asp-for="TextPrompt" rows="4" placeholder="Write a short product description for a travel app"></textarea>
+        <span asp-validation-for="TextPrompt"></span>
+        <button class="text" type="submit" asp-page-handler="GenerateText">Generate text</button>
+    </form>
+
+    <section>
+        <h2>Text result</h2>
+        <textarea rows="7" readonly>@Model.TextAnswer</textarea>
+    </section>
+</body>
+</html>
